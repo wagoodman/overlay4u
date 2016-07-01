@@ -6,6 +6,7 @@
 *.class
 *.dll
 *.pyc
+*__pycache__
 
 # packages
 *.7z
