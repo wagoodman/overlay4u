@@ -7,7 +7,7 @@ Test OverlayFS and OverlayFSManager
 import fudge
 from nose.tools import raises
 from testkit import ContextUser
-from overlay4u.overlay import *
+from overlayUtils.overlay import *
 from .utils import verify, reset
 
 
@@ -15,8 +15,8 @@ class GenericOverlaySetup(object):
     def base_setup(self):
         # Patch all of these objects for all tests
         context = fudge.patch('subwrap.run',
-                'overlay4u.overlay.ensure_directories',
-                'overlay4u.overlay.MountTable',
+                'overlayUtils.overlay.ensure_directories',
+                'overlayUtils.overlay.MountTable',
                 )
         self.context_user = ContextUser(context)
         self.fake_run, self.fake_ensure, self.fake_mount_table = self.context_user.enter()
@@ -140,7 +140,7 @@ def test_overlayfs_from_entry_fails():
     OverlayFS.from_entry(fake_mount_entry)
 
 
-@fudge.patch('overlay4u.overlay.MountTable', 'overlay4u.overlay.OverlayFS')
+@fudge.patch('overlayUtils.overlay.MountTable', 'overlayUtils.overlay.OverlayFS')
 def test_overlayfs_manager_list(fake_mount_table_cls, fake_overlayfs_cls):
     fake_mount_table = fake_mount_table_cls.expects('load').returns_fake()
     (fake_mount_table.expects('as_list')

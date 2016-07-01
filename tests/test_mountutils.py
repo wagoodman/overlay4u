@@ -7,7 +7,7 @@ currently mounted as an overlay at this time.
 """
 import fudge
 from nose.tools import raises
-from overlay4u.mountutils import *
+from overlayUtils.mountutils import *
 
 TEST_MOUNT_LIST_ENTRY1 = 'dev on /dir type fstype (opt1,opt2,opt3=val)'
 TEST_MOUNT_LIST_ENTRY2 = '/dev2 on /dir2 type fstype2 (opt1=val,opt2,opt3=val)'

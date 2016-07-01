@@ -14,7 +14,7 @@ from nose.tools import raises
 from testkit import temp_directory, random_string
 from tests import fixtures_path
 from .utils import only_as_root
-import overlay4u
+import overlayUtils
 
 
 def read_file_data(filepath):
@@ -36,7 +36,7 @@ def test_mount():
         # Use a temp directory for the mount point
         with temp_directory() as temp_mount_point:
             # Mount the overlay
-            overlay = overlay4u.mount(temp_mount_point, lower_dir, temp_upper_dir)
+            overlay = overlayUtils.mount(temp_mount_point, lower_dir, temp_upper_dir)
 
             # Read the hello.txt file in the mount_point
             hello_overlay_path = os.path.join(temp_mount_point, 'hello.txt')
@@ -84,9 +84,9 @@ def test_mount_and_load():
         with temp_directory() as temp_upper_dir:
             with temp_directory() as temp_mount_point:
                 try:
-                    overlay = overlay4u.mount(temp_mount_point,
+                    overlay = overlayUtils.mount(temp_mount_point,
                             temp_lower_dir, temp_upper_dir)
-                    same_overlay = overlay4u.get(temp_mount_point)
+                    same_overlay = overlayUtils.get(temp_mount_point)
                     assert overlay.mount_point == same_overlay.mount_point
                     assert overlay.lower_dir == same_overlay.lower_dir
                     assert overlay.upper_dir == same_overlay.upper_dir
@@ -99,7 +99,7 @@ def test_mount_and_load():
 
 
 @only_as_root
-@raises(overlay4u.utils.PathDoesNotExist)
+@raises(overlayUtils.utils.PathDoesNotExist)
 def test_mount_directory_does_not_exist():
     # Create and delete 3 directories
     with temp_directory() as random_mount:
@@ -108,4 +108,4 @@ def test_mount_directory_does_not_exist():
         pass
     with temp_directory() as random_upper:
         pass
-    overlay4u.mount(random_mount, random_lower, random_upper)
+    overlayUtils.mount(random_mount, random_lower, random_upper)
