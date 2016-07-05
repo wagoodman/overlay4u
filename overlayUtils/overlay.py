@@ -18,7 +18,8 @@ class FakeMountVerify(object):
 
 class OverlayFS(object):
     @classmethod
-    def mount(cls, mount_point, lower_dir, upper_dir, mount_table=None):
+    def mount(cls, mount_point, lower_dir, upper_dir, working_dir=None,
+              readonly=False, mount_table=None):
         """Execute the mount. This requires root"""
         ensure_directories(mount_point, lower_dir, upper_dir)
 
@@ -28,10 +29,25 @@ class OverlayFS(object):
         if mount_table.is_mounted(mount_point):
             raise AlreadyMounted()
 
-        options = "rw,lowerdir=%s,upperdir=%s" % (lower_dir, upper_dir)
+        if readonly:
+            writeOpt = "ro"
+        else:
+            writeOpt = "rw"
 
-        subwrap.run(['mount', '-t', 'overlayfs', '-o', options,
-            'olyfs%s' % random_name(), mount_point])
+        # support for multiple lower read-only directories (linux kernel >= 3.19)
+        if isinstance(lower_dir, list) or isinstance(lower_dir, tuple):
+            lower_dir = ":".join(lower_dir)
+
+        options = "%s,lowerdir=%s,upperdir=%s" % (writeOpt, lower_dir, upper_dir)
+
+        if working_dir != None:
+            options += ",workdir=%s" % working_dir
+
+        # TODO: add kernel version detection to determine whether to use
+        # 'overlay' (new) or 'overlayfs' (old)
+
+        subwrap.run(['mount', '-t', 'overlay', '-o', options,'stacko%s' % random_name(), mount_point])
+
         return cls(mount_point, lower_dir, upper_dir)
 
     @classmethod

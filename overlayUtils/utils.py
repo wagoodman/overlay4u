@@ -25,7 +25,11 @@ def ensure_directory(path):
 
 def ensure_directories(*paths):
     for path in paths:
-        ensure_directory(path)
+        if isinstance(path, list) or isinstance(path, tuple):
+            for subpath in path:
+                ensure_directory(subpath)
+        else:
+            ensure_directory(path)
 
 def random_name(length=10):
     letter_list = []
