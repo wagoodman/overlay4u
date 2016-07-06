@@ -1,3 +1,7 @@
+.. image:: https://www.quantifiedcode.com/api/v1/project/771dc857518f4ffd97e9d8225f80d9e1/badge.svg
+  :target: https://www.quantifiedcode.com/app/project/771dc857518f4ffd97e9d8225f80d9e1
+  :alt: Code issues
+  
 overlayUtils - Tools for dealing with overlayfs in ubuntu (Work in Progress)
 ============================================================================
 
